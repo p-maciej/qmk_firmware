@@ -51,6 +51,7 @@ uint16_t       side_led_last_act     = 0;
 uint16_t       sleep_time_delay      = SLEEP_TIME_DELAY;
 host_driver_t *m_host_driver         = 0;
 RGB            bat_pct_rgb           = {.r = 0x80, .g = 0x80, .b = 0x00};
+RGB            rgb_black             = {.r = 0x00, .g = 0x00, .b = 0x00};
 
 extern host_driver_t rf_host_driver;
 
@@ -427,6 +428,18 @@ void bat_pct_led_kb(void) {
 
     uint8_t led_idx_tens = bat_percent / 10;
     uint8_t led_idx_ones = bat_percent % 10;
+    if(led_idx_ones == 0) {
+        led_idx_ones = 20;
+    } else {
+        led_idx_ones = 30 - led_idx_ones;
+    }
+
+    // disable all RGB temporarily
+    for (uint8_t i = 0; i  < RGB_MATRIX_LED_COUNT; i++) {
+        if(i != led_idx_ones && i != led_idx_tens) {
+            user_set_rgb_color(i, rgb_black.r, rgb_black.g, rgb_black.b);
+        }
+    }
 
     // set F key for battery percentage tens (e.g, 10%)
     if (led_idx_tens > 0) {
@@ -434,11 +447,7 @@ void bat_pct_led_kb(void) {
     }
 
     // set number key for battery percentage ones (e.g., 5 in 15%)
-    if (led_idx_ones == 0) {
-        user_set_rgb_color(20, bat_pct_rgb.r, bat_pct_rgb.g, bat_pct_rgb.b);
-    } else {
-        user_set_rgb_color(30 - led_idx_ones, bat_pct_rgb.r, bat_pct_rgb.g, bat_pct_rgb.b);
-    }
+    user_set_rgb_color(led_idx_ones, bat_pct_rgb.r, bat_pct_rgb.g, bat_pct_rgb.b);
 }
 
 /**
