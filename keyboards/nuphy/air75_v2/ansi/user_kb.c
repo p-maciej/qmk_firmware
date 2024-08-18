@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "user_kb.h"
 #include "ansi.h"
+#include "keymap_introspection.h"
 #include "usb_main.h"
 #include "mcu_pwr.h"
 #include "color.h"
@@ -36,6 +37,7 @@ bool f_rf_sw_press     = 0;
 bool f_dev_reset_press = 0;
 bool f_rgb_test_press  = 0;
 bool f_bat_num_show    = 0;
+bool f_fun_win_press   = 0;
 
 uint8_t        rf_blink_cnt          = 0;
 uint8_t        rf_sw_temp            = 0;
@@ -52,6 +54,7 @@ uint16_t       sleep_time_delay      = SLEEP_TIME_DELAY;
 host_driver_t *m_host_driver         = 0;
 RGB            bat_pct_rgb           = {.r = 0x80, .g = 0x80, .b = 0x00};
 RGB            rgb_black             = {.r = 0x00, .g = 0x00, .b = 0x00};
+RGB            rgb_white             = {.r = 0x80, .g = 0x80, .b = 0x80};
 
 extern host_driver_t rf_host_driver;
 
@@ -414,6 +417,25 @@ void kb_config_reset(void) {
     kb_config.sleep_mode      = SLEEP_MODE_DEEP;
     kb_config.rf_link_timeout = LINK_TIMEOUT_ALT;
     eeconfig_update_kb_datablock(&kb_config);
+}
+
+/**
+ * @brief  Show RGB lighting where key is assigned
+ */
+void show_fun_rgb(uint8_t layer) {
+    for(uint8_t i = 0; i < MATRIX_ROWS; i++) {
+        for(uint8_t j = 0; j < MATRIX_COLS; j++) {
+            uint8_t led_id = g_led_config.matrix_co[i][j];
+            if(led_id != NO_LED) {
+                uint16_t keycode = keycode_at_keymap_location(layer, i, j);
+                if(keycode == KC_TRNS || keycode == KC_NO) {
+                    user_set_rgb_color(led_id, rgb_black.r, rgb_black.g, rgb_black.b);
+                } else {
+                    user_set_rgb_color(led_id, rgb_white.r, rgb_white.g, rgb_white.b);
+                }
+            }
+        }
+    }
 }
 
 /**

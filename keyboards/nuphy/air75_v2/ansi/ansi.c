@@ -217,6 +217,10 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 
+        case MO(3):
+            f_fun_win_press = record->event.pressed;
+            return true;
+
         default:
             return true;
     }
@@ -227,6 +231,10 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 bool rgb_matrix_indicators_kb(void) {
     if (!rgb_matrix_indicators_user()) {
         return false;
+    }
+
+    if (f_fun_win_press) {
+        show_fun_rgb(3);
     }
 
     if (f_bat_num_show || f_bat_hold) {
