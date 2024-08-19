@@ -63,5 +63,7 @@ The experience you get with the firmware may vary from mine and is dependent on 
 
 ## @p-maciej customizations
 - Added support for Alphas Mods RGB effect. For this functionality to work properly updated /keyboards/nuphy/air75_v2/ansi/keymaps/via/air75_v2_via_v3.json file must be used in VIA.
+- Added dynamic fn lighting functionality to highlight assigned keys in secondary leyers
+- When showing battery status, all backlighting is off except the status.
 
 

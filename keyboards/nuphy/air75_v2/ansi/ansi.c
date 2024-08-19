@@ -221,6 +221,14 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             f_fun_win_press = record->event.pressed;
             return true;
 
+        case MO(1):
+            f_fun_mac_press = record->event.pressed;
+            return true;
+
+        case MO(4):
+            f_fun_m_press = record->event.pressed;
+            return true;
+
         default:
             return true;
     }
@@ -233,8 +241,12 @@ bool rgb_matrix_indicators_kb(void) {
         return false;
     }
 
-    if (f_fun_win_press) {
+    if (f_fun_m_press) { // M has to be first to evaluate second key
+        show_fun_rgb(4);
+    } else if(f_fun_win_press) {
         show_fun_rgb(3);
+    } else if(f_fun_mac_press) {
+        show_fun_rgb(1);
     }
 
     if (f_bat_num_show || f_bat_hold) {
