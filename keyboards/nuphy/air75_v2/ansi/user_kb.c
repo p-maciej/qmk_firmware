@@ -38,6 +38,8 @@ bool f_dev_reset_press = 0;
 bool f_rgb_test_press  = 0;
 bool f_bat_num_show    = 0;
 bool f_fun_win_press   = 0;
+bool f_fun_mac_press   = 0;
+bool f_fun_m_press     = 0;
 
 uint8_t        rf_blink_cnt          = 0;
 uint8_t        rf_sw_temp            = 0;
@@ -420,7 +422,7 @@ void kb_config_reset(void) {
 }
 
 /**
- * @brief  Show RGB lighting where key is assigned
+ * @brief  Show RGB lighting where key is assigned at specific layer
  */
 void show_fun_rgb(uint8_t layer) {
     for(uint8_t i = 0; i < MATRIX_ROWS; i++) {
