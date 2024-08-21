@@ -207,6 +207,13 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         case RGB_VAI: // ensure LED powers on with brightness increase
             if (record->event.pressed) {
                 pwr_rgb_led_on();
+                ignore_fun_dim = true;
+            }
+            return true;
+
+        case RGB_VAD:
+            if (record->event.pressed) {
+                ignore_fun_dim = true;
             }
             return true;
 
@@ -219,10 +226,16 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
         case MO(3):
             f_fun_win_press = record->event.pressed;
+            if(!record->event.pressed) {
+                ignore_fun_dim = false;
+            }
             return true;
 
         case MO(1):
             f_fun_mac_press = record->event.pressed;
+            if(!record->event.pressed) {
+                ignore_fun_dim = false;
+            }
             return true;
 
         case MO(4):
