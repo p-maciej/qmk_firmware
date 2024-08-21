@@ -40,6 +40,7 @@ bool f_bat_num_show    = 0;
 bool f_fun_win_press   = 0;
 bool f_fun_mac_press   = 0;
 bool f_fun_m_press     = 0;
+bool ignore_fun_dim    = 0;
 
 uint8_t        rf_blink_cnt          = 0;
 uint8_t        rf_sw_temp            = 0;
@@ -431,7 +432,9 @@ void show_fun_rgb(uint8_t layer) {
             if(led_id != NO_LED) {
                 uint16_t keycode = keycode_at_keymap_location(layer, i, j);
                 if(keycode == KC_TRNS || keycode == KC_NO) {
-                    user_set_rgb_color(led_id, rgb_black.r, rgb_black.g, rgb_black.b);
+                    if(!ignore_fun_dim) {
+                        user_set_rgb_color(led_id, rgb_black.r, rgb_black.g, rgb_black.b);
+                    }
                 } else {
                     user_set_rgb_color(led_id, rgb_white.r, rgb_white.g, rgb_white.b);
                 }
